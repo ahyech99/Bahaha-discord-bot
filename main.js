@@ -16,7 +16,7 @@ const player = new Player(client, {
 client.player = player;
 
 client.on("ready", () => {
-    console.log("I am ready to Play with DMP 🎶");
+    console.log("Ready");
 });
 
 client.login(settings.token);
