@@ -6,5 +6,9 @@
     "discord-music-player": "^8.0.2",
     "discord.js": "^13.1.0",
     "ffmpeg": "^0.0.4"
+  },
+  "engines": {
+    "node": "16.x",
+    "npm": "7.x"
   }
 }
