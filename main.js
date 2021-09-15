@@ -16,7 +16,7 @@ const player = new Player(client, {
 client.player = player;
 
 client.on("ready", () => {
-    console.log("Ready");
+    console.log("Ready aaaa");
 });
 
 client.login(settings.token);
