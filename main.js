@@ -5,7 +5,7 @@ const client = new Client({
 });
 const settings = {
     prefix: '!',
-    token: process.env.token
+    token: 'ODg2OTIwMDE3NTU0MzI5NjIw.YT8mog.ESE1Gi3kiQEyPSeRiF0N320J_qw'
 };
 
 const { Player } = require("discord-music-player");
