@@ -60,6 +60,22 @@ client.on('messageCreate', async (message) => {
     const command = args.shift();
     let guildQueue = client.player.getQueue(message.guild.id);
 
+    if (command === 'spank') {
+        if (args[0]) {
+            // Change `getUserFromMention` to `getUserFromMentionRegEx` to try the RegEx variant.
+            const user = getUserFromMention(args[0]);
+
+            if (!user) {
+                return message.reply('Tag someone woi');
+            }
+
+            return message.channel.send(`You spanked <@${user.id}>`);
+        }
+
+        return message.channel.send(`Tag someone to spank, or you want to spank yourself?`);
+    }
+
+
     if (command === 'help') {
         const embed = new MessageEmbed()
             .setColor('#00D100')
@@ -68,21 +84,21 @@ client.on('messageCreate', async (message) => {
             .setDescription('Commands la jibai dunno read isit')
             .addFields(
                 { name: '!play / !p', value: 'Usage: !play <url/song name> / !p <url/song name>' },
-                { name: '!playlist', value: 'Usage: !playlist <url/playlist>'},
-                { name: '!queue', value: 'Usage: !queue (WIP)'},
-                { name: '!skip / !sk', value: 'Usage: !skip / !sk (Skip current song)'},
-                { name: '!stop / !st / !leave', value: 'Usage: !skip / !sk / !leave (Stop and leave voice channel)'},
-                { name: '!shuffle', value: 'Usage: !shuffle (Shuffle queue)'},
-                { name: '!clear', value: 'Usage: !clear (Clear queue)'},
-                { name: '!now', value: 'Usage: !now (Get the current playing song)'},
-                { name: '!pause', value: 'Usage: !pause (Pause the song)'},
-                { name: '!resume', value: 'Usage: !resume (Resume the song)'},
-                { name: '!loop / !l', value: 'Usage: !loop / !l (Loop the current playing song)'},
-                { name: '!loopQueue / !lq', value: 'Usage: !loopQueue / !lq (Loop the current queue)'},
-                { name: '!removeLoop / !noloop /', value: 'Usage: !noloop / !removeLoop (Stop the loop (Queue/Song))'},
-                { name: '!remove', value: 'Usage: !remove <int> (WIP)'},
+                { name: '!playlist', value: 'Usage: !playlist <url/playlist>' },
+                { name: '!queue', value: 'Usage: !queue (WIP)' },
+                { name: '!skip / !sk', value: 'Usage: !skip / !sk (Skip current song)' },
+                { name: '!stop / !st / !leave', value: 'Usage: !skip / !sk / !leave (Stop and leave voice channel)' },
+                { name: '!shuffle', value: 'Usage: !shuffle (Shuffle queue)' },
+                { name: '!clear', value: 'Usage: !clear (Clear queue)' },
+                { name: '!now', value: 'Usage: !now (Get the current playing song)' },
+                { name: '!pause', value: 'Usage: !pause (Pause the song)' },
+                { name: '!resume', value: 'Usage: !resume (Resume the song)' },
+                { name: '!loop / !l', value: 'Usage: !loop / !l (Loop the current playing song)' },
+                { name: '!loopQueue / !lq', value: 'Usage: !loopQueue / !lq (Loop the current queue)' },
+                { name: '!removeLoop / !noloop /', value: 'Usage: !noloop / !removeLoop (Stop the loop (Queue/Song))' },
+                { name: '!remove', value: 'Usage: !remove <int> (WIP)' },
             )
-        message.channel.send({embeds : [embed]});
+        message.channel.send({ embeds: [embed] });
     }
 
     if (command === 'play' || command === 'p') {
@@ -105,7 +121,7 @@ client.on('messageCreate', async (message) => {
         message.channel.send(`Added ${song} playlist`);
     }
 
-    if (command === 'skip' || command === 'sk' || command ==='s') {
+    if (command === 'skip' || command === 'sk' || command === 's') {
         guildQueue.skip();
         message.channel.send(`Skipped`);
     }
@@ -115,7 +131,7 @@ client.on('messageCreate', async (message) => {
         guildQueue.stop();
     }
 
-    if (command === 'removeLoop' || command ==='noLoop' || command==='noloop') {
+    if (command === 'removeLoop' || command === 'noLoop' || command === 'noloop') {
         guildQueue.setRepeatMode(RepeatMode.DISABLED); // or 0 instead of RepeatMode.DISABLED
     }
 
@@ -124,7 +140,7 @@ client.on('messageCreate', async (message) => {
         message.channel.send(`Looping current song`);
     }
 
-    if (command === 'loopQueue' || command ==='lq') {
+    if (command === 'loopQueue' || command === 'lq') {
         guildQueue.setRepeatMode(RepeatMode.QUEUE); // or 2 instead of RepeatMode.QUEUE
         message.channel.send(`Looping current queue`);
     }
@@ -178,3 +194,19 @@ client.on('messageCreate', async (message) => {
         message.channel.send(ProgressBar.prettier);
     }
 })
+
+
+//function
+function getUserFromMention(mention) {
+	// The id is the first and only match found by the RegEx.
+	const matches = mention.match(/^<@!?(\d+)>$/);
+
+	// If supplied variable was not a mention, matches will be null instead of an array.
+	if (!matches) return;
+
+	// However, the first element in the matches array will be the entire mention, not just the ID,
+	// so use index 1.
+	const id = matches[1];
+
+	return client.users.cache.get(id);
+}
