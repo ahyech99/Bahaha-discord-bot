@@ -62,7 +62,6 @@ client.on('messageCreate', async (message) => {
 
     if (command === 'spank') {
         if (args[0]) {
-            // Change `getUserFromMention` to `getUserFromMentionRegEx` to try the RegEx variant.
             const user = getUserFromMention(args[0]);
 
             if (!user) {
@@ -102,23 +101,31 @@ client.on('messageCreate', async (message) => {
     }
 
     if (command === 'play' || command === 'p') {
-        let queue = client.player.createQueue(message.guild.id);
-        await queue.join(message.member.voice.channel);
-        let song = await queue.play(args.join(' ')).catch(_ => {
-            if (!guildQueue)
-                queue.stop();
-        });
-        message.channel.send(`Added ${song} into the queue!`);
+        try {
+            let queue = client.player.createQueue(message.guild.id);
+            await queue.join(message.member.voice.channel);
+            let song = await queue.play(args.join(' ')).catch(_ => {
+                if (!guildQueue)
+                    queue.stop();
+            });
+            message.channel.send(`Added ${song} into the queue!`);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     if (command === 'playlist') {
-        let queue = client.player.createQueue(message.guild.id);
-        await queue.join(message.member.voice.channel);
-        let song = await queue.playlist(args.join(' ')).catch(_ => {
-            if (!guildQueue)
-                queue.stop();
-        });
-        message.channel.send(`Added ${song} playlist`);
+        try {
+            let queue = client.player.createQueue(message.guild.id);
+            await queue.join(message.member.voice.channel);
+            let song = await queue.playlist(args.join(' ')).catch(_ => {
+                if (!guildQueue)
+                    queue.stop();
+            });
+            message.channel.send(`Added ${song} playlist`);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     if (command === 'skip' || command === 'sk' || command === 's') {
@@ -198,15 +205,15 @@ client.on('messageCreate', async (message) => {
 
 //function
 function getUserFromMention(mention) {
-	// The id is the first and only match found by the RegEx.
-	const matches = mention.match(/^<@!?(\d+)>$/);
+    // The id is the first and only match found by the RegEx.
+    const matches = mention.match(/^<@!?(\d+)>$/);
 
-	// If supplied variable was not a mention, matches will be null instead of an array.
-	if (!matches) return;
+    // If supplied variable was not a mention, matches will be null instead of an array.
+    if (!matches) return;
 
-	// However, the first element in the matches array will be the entire mention, not just the ID,
-	// so use index 1.
-	const id = matches[1];
+    // However, the first element in the matches array will be the entire mention, not just the ID,
+    // so use index 1.
+    const id = matches[1];
 
-	return client.users.cache.get(id);
+    return client.users.cache.get(id);
 }
