@@ -50,10 +50,6 @@ client.player
     // Emitted when deafenOnJoin is true and the bot was undeafened
     .on('clientUndeafen', (queue) =>
         console.log(`I got undefeanded.`))
-    // Emitted when there was an error in runtime
-    .on('error', (error, queue) => {
-        console.log(`Error: ${error}`);
-    });
 
 client.on('messageCreate', async (message) => {
     const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
