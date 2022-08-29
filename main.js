@@ -4,15 +4,14 @@ const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES]
 });
 const settings = {
+//insert token later
     prefix: '!',
-    token: 'ODg2OTIwMDE3NTU0MzI5NjIw.YT8mog.ESE1Gi3kiQEyPSeRiF0N320J_qw'
+    token: ''
 };
 
 const { Player } = require("discord-music-player");
-const player = new Player(client, {
-    leaveOnEmpty: false, // This options are optional.
-});
-// You can define the Player as *client.player* to easly access it.
+
+//define player
 client.player = player;
 
 client.on("ready", () => {
